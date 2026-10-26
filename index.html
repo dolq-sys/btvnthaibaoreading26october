@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Reading Test</title>
+<style>
+:root{
+  --bg:#f6f7f9;--panel:#fff;--ink:#1d2330;--muted:#5d6676;--line:#dde1e7;
+  --accent:#1f5fbf;--accent-soft:#e8f0fc;--ok:#1e8a4c;--ok-soft:#e6f5ec;
+  --bad:#c0392b;--bad-soft:#fdecea;--hl:#fff176;--ev:#bdeccb;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);font-size:15px;line-height:1.6;display:flex;flex-direction:column}
+button{font:inherit;cursor:pointer}
+.top{display:flex;align-items:center;gap:10px;padding:8px 16px;background:var(--panel);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.top h1{font-size:16px;margin:0;font-weight:700}
+.top .name{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:14px}
+.top .name input{border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit;width:190px}
+.top .spacer{flex:1}
+.attempt{font-size:13px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:20px;padding:2px 10px;white-space:nowrap}
+.timer{font-variant-numeric:tabular-nums;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px}
+.btn{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:6px;padding:6px 16px;font-weight:600;white-space:nowrap}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:#fff;color:var(--accent)}
+.btn.icon{padding:6px 9px;display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--ink);border-color:var(--line);font-weight:500}
+.btn.icon svg{width:17px;height:17px}
+.btn.green{background:var(--ok);border-color:var(--ok)}
+.tabs{display:flex;gap:4px;padding:0 16px;background:var(--panel);border-bottom:1px solid var(--line)}
+.tab{border:none;background:none;padding:10px 14px;color:var(--muted);font-weight:600;border-bottom:3px solid transparent}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab .cnt{font-weight:400;font-size:12px;margin-left:4px}
+.main{flex:1;min-height:0;display:flex}
+.pane{overflow-y:auto;padding:20px 24px;background:var(--panel)}
+.left{flex:0 0 50%}
+.right{flex:1}
+.divider{flex:0 0 8px;background:var(--line);cursor:col-resize;position:relative}
+.divider::after{content:"";position:absolute;top:50%;left:2px;width:4px;height:36px;margin-top:-18px;border-radius:2px;background:#aab2bf}
+.passage h2{text-align:center;font-size:22px;margin:4px 0 6px}
+.passage .sub{font-style:italic;color:var(--muted);text-align:center;margin:0 0 16px}
+.passage .plabel{font-weight:700;margin:14px 0 2px}
+.passage p{margin:0 0 12px;text-align:justify}
+.passage .foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px;margin-top:16px}
+.ptitle{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin-bottom:4px}
+.ev.show{background:var(--ev);border-radius:3px;box-shadow:0 0 0 2px var(--ev)}
+mark.hl{background:var(--hl);color:inherit;padding:0;border-radius:2px;cursor:pointer}
+.qset{margin-bottom:28px}
+.qset h3{font-size:16px;margin:0 0 6px}
+.qset .ins{margin:2px 0;color:#333}
+.legend{display:grid;grid-template-columns:max-content 1fr;gap:2px 18px;margin:8px 0 12px 12px}
+.q{margin:14px 0;padding:10px 12px;border-radius:8px}
+.q .stem{margin-bottom:6px}
+.qn{font-weight:700;margin-right:6px}
+.opts label{display:flex;gap:8px;align-items:flex-start;padding:3px 6px;border-radius:6px;cursor:pointer}
+.opts label:hover{background:var(--accent-soft)}
+.opts input{margin-top:5px}
+table.grid{border-collapse:collapse;width:100%;margin:10px 0}
+table.grid th,table.grid td{border:1px solid var(--line);padding:6px 8px}
+table.grid th{background:#f1f3f6;font-size:13px}
+table.grid td.c{text-align:center;width:34px;padding:0}
+table.grid td.c label{display:block;padding:8px 0;cursor:pointer}
+.people{display:grid;grid-template-columns:28px 1fr;gap:2px 8px;margin:6px 0 10px 12px}
+.summary{border-left:4px solid var(--line);padding:4px 0 4px 14px;margin:12px 0;line-height:2.4}
+.summary h4{text-align:center;margin:0 0 4px;font-size:17px;font-family:Georgia,serif}
+.gap{display:inline-block;vertical-align:middle;width:170px;border:1px solid #b9c0cb;border-radius:6px;padding:2px 8px;font:inherit;line-height:1.5;background:#fff}
+.gap:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+.drop{display:inline-block;vertical-align:middle;min-width:140px;min-height:32px;line-height:30px;border:1.5px dashed #a9b1bd;border-radius:6px;padding:0 10px;color:var(--muted);font-size:14px;background:#fafbfc;text-align:center;cursor:pointer}
+.drop.filled{border-style:solid;border-color:var(--accent);color:var(--ink);background:var(--accent-soft);font-weight:600}
+.drop.over{background:#dfe9fb}
+.bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:6px;padding:5px 12px;cursor:grab;user-select:none}
+.chip.sel{border-color:var(--accent);background:var(--accent-soft)}
+.sent{margin:10px 0;line-height:2.3}
+.mark{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700;border-radius:5px;padding:1px 8px;margin-left:6px;vertical-align:middle;line-height:1.6}
+.mark.ok{color:var(--ok);background:var(--ok-soft)}
+.mark.no{color:var(--bad);background:var(--bad-soft)}
+.tools{display:inline-flex;gap:4px;vertical-align:middle;margin-left:4px}
+.ic{border:none;background:none;padding:2px;border-radius:4px;display:inline-flex;color:var(--accent)}
+.ic:hover{background:var(--accent-soft)}
+.ic svg{width:18px;height:18px}
+.expl{display:none;margin-top:6px;padding:8px 10px;background:#f4f7fc;border-left:3px solid var(--accent);border-radius:4px;font-size:14px;line-height:1.55}
+.expl.open{display:block}
+.good-row{background:var(--ok-soft)}
+.bad-row{background:var(--bad-soft)}
+td.c.key{box-shadow:inset 0 0 0 3px var(--ok)}
+.gap.ok,.drop.ok{border-color:var(--ok)!important;background:var(--ok-soft)}
+.gap.no,.drop.no{border-color:var(--bad)!important;background:var(--bad-soft)}
+.opts label.key{box-shadow:inset 0 0 0 2px var(--ok);background:var(--ok-soft)}
+.opts label.wrong{background:var(--bad-soft)}
+.nav{display:flex;align-items:center;gap:4px;padding:6px 12px;background:var(--panel);border-top:1px solid var(--line);overflow-x:auto}
+.nav .pl{font-size:12px;color:var(--muted);font-weight:700;margin:0 4px 0 10px;white-space:nowrap}
+.nb{min-width:28px;height:28px;border:1px solid var(--line);background:#fff;border-radius:5px;font-size:12px;padding:0}
+.nb.done{background:var(--accent);color:#fff;border-color:var(--accent)}
+.nb.ok{background:var(--ok);color:#fff;border-color:var(--ok)}
+.nb.no{background:var(--bad);color:#fff;border-color:var(--bad)}
+.modal{position:fixed;inset:0;background:rgba(20,25,35,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal.open{display:flex}
+.card{background:#fff;border-radius:12px;padding:24px 26px;max-width:460px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.2)}
+.card h2{margin:0 0 8px;font-size:20px}
+.card .big{font-size:42px;font-weight:800;color:var(--accent);margin:6px 0}
+.card .row{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+.card .status{font-size:13px;color:var(--muted);margin-top:8px}
+.hist{font-size:13px;margin-top:10px;border-collapse:collapse;width:100%}
+.hist td,.hist th{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
+.scorebox{display:none;align-items:center;gap:8px;font-weight:700;color:var(--ok)}
+.banner{display:none;background:#fff8e1;border-bottom:1px solid #f0d98a;padding:8px 16px;font-size:14px}
+#hlbar{position:fixed;z-index:60;display:none;background:#1d2330;border-radius:8px;padding:4px;gap:4px;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#hlbar button{border:none;background:none;color:#fff;font-size:13px;font-weight:600;padding:5px 10px;border-radius:5px;display:inline-flex;align-items:center;gap:6px}
+#hlbar button:hover{background:rgba(255,255,255,.15)}
+#hlbar .sw{width:14px;height:14px;border-radius:3px;background:var(--hl);display:inline-block}
+#popOverlay{position:fixed;inset:0;background:#fff;z-index:70;display:none;align-items:center;justify-content:center;text-align:center;padding:24px}
+@media (max-width:820px){
+  .main{flex-direction:column}
+  .left{flex:none!important;max-height:45vh;border-bottom:2px solid var(--line)}
+  .divider{display:none}
+  .pane{padding:14px 16px}
+  .gap{width:140px}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <h1>IELTS Academic Reading</h1>
+  <div class="name">Họ tên: <input id="stuName" placeholder="Nhập họ và tên" autocomplete="off"></div>
+  <div class="name">Lớp: <input id="stuClass" placeholder="VD: 10A1" autocomplete="off" style="width:90px"></div>
+  <div class="spacer"></div>
+  <div class="scorebox" id="scoreTop"></div>
+  <span class="attempt" id="attemptLbl"></span>
+  <div class="timer" title="Thời gian làm bài">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg>
+    <span id="clock">00:00</span>
+  </div>
+  <button class="btn icon" id="fsBtn" title="Toàn màn hình">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span id="fsTxt">Toàn màn hình</span>
+  </button>
+  <button class="btn" id="submitBtn">Nộp bài</button>
+  <button class="btn green" id="retryBtn" style="display:none">Làm lại</button>
+</div>
+<div class="banner" id="banner"></div>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="main" id="main">
+  <div class="pane left" id="left"></div>
+  <div class="divider" id="divider" title="Kéo để đổi kích thước"></div>
+  <div class="pane right" id="right"></div>
+</div>
+
+<div class="nav" id="nav"></div>
+
+<div id="hlbar">
+  <button id="hlAdd" title="Tô màu đoạn đã chọn"><span class="sw"></span>Highlight</button>
+  <button id="hlDel" title="Bỏ tô màu">Bỏ highlight</button>
+</div>
+
+<div id="popOverlay">
+  <div>
+    <h2>Bài đang mở ở cửa sổ toàn màn hình</h2>
+    <p>Con làm bài ở cửa sổ mới. Khi đóng cửa sổ đó, bài làm sẽ hiện lại ở đây.</p>
+  </div>
+</div>
+
+<div class="modal" id="confirmModal">
+  <div class="card">
+    <h2 id="confirmTitle">Nộp bài?</h2>
+    <p id="confirmText"></p>
+    <div class="row">
+      <button class="btn ghost" onclick="closeModal('confirmModal')">Huỷ</button>
+      <button class="btn" id="confirmGo">Đồng ý</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="resultModal">
+  <div class="card">
+    <h2 id="resTitle">Kết quả</h2>
+    <div class="big" id="resScore"></div>
+    <div id="resBand"></div>
+    <div class="status" id="sendStatus">Đang gửi kết quả...</div>
+    <table class="hist" id="histTbl"></table>
+    <p style="font-size:14px;margin-top:12px">Con xem lại từng câu: đáp án đúng có viền xanh. Bấm <b>i</b> để đọc giải thích, bấm kính lúp để tìm câu chứa đáp án trong bài đọc.</p>
+    <p style="font-size:14px" id="retryNote"></p>
+    <div class="row"><button class="btn" onclick="closeModal('resultModal')">Xem lại bài</button></div>
+  </div>
+</div>
+
+<!-- ========== PASSAGES ========== -->
+<template id="p1">
+<div class="passage">
+<div class="ptitle">Reading Passage 1</div>
+<p style="font-size:13px;color:var(--muted)">You should spend about 20 minutes on Questions 1–13, which are based on Reading Passage 1 below.</p>
+<h2>Footprints in the muds of time</h2>
+<p class="sub">The dinosaurs may have risen to power in as little as 10,000 years...</p>
+<p><span class="ev" data-q="1">Everybody knows that the dinosaurs became extinct as a result of a large asteroid</span>; something big hit the Earth 65 million years ago and, when the dust had fallen, so had the great reptiles. There is thus a nice, if ironic, symmetry in the idea that a similar impact brought about the dinosaurs' rise. That is the thesis proposed by Paul Olsen of Columbia University.</p>
+<p>Dinosaurs first appear in the fossil record 230 million years ago, during the Triassic period. But they were mostly small, and they shared the Earth with lots of other sorts of reptile. It was in the subsequent Jurassic period, which began 202 million years ago, that they overran the planet and <span class="ev" data-q="2">turned into the monsters realistically depicted in modern books and movies</span>. <span class="ev" data-q="3">Dr Olsen and his colleagues are not the first to suggest that the dinosaurs inherited the Earth as the result of an asteroid strike. But they are the first to show that the takeover did, indeed, happen in a geological eye blink.</span></p>
+<p><span class="ev" data-q="4">Dinosaur skeletons are rare. Dinosaur footprints are, however, surprisingly abundant.</span> And the size of the prints is as good an indication of the size of the beasts as are the skeletons themselves. Dr Olsen and his colleagues therefore concentrated on prints, not bones. The prints in question were made in Eastern North America, a part of the world then full of rift valleys similar to those in East Africa today. Like the modern African rift valleys, the Triassic/Jurassic American ones contained lakes, and these lakes grew and shrank at regular intervals because of climatic changes. Rocks from this place and period can be dated to within a few thousand years. As a bonus, squishy lake-edge sediments are just the things for recording the tracks of passing animals.</p>
+<p>By dividing the labour between them, the research team were able to study such tracks at 80 sites and look at 18 so-called ichnotaxa. <span class="ev" data-q="5">These are recognisable types of footprint that cannot be matched precisely within the species of animal that left them. But they can be matched with a general sort of animal</span>, and thus act as an indicator of the fate of that group, even when there are no bones to tell the story.</p>
+<p>Their findings show that five of the ichnotaxa disappear before the end of the Triassic, and <span class="ev" data-q="6">four march confidently across the boundary into the Jurassic. Six, however, vanish at the boundary, or only just splutter across it; and three appear from nowhere, almost as soon as the Jurassic begins.</span></p>
+<p>That boundary itself is suggestive. The first geological indication of the impact that killed the dinosaurs was an unusually high level of iridium in rocks at the end of the Cretaceous period, when the beasts disappear from the fossil record. Iridium is normally rare at the Earth's surface, but it is more abundant in meteorites. When people began to believe the impact theory, they started looking for other Cretaceous-end anomalies. One that turned up was a surprising abundance of fern spores in rocks just above the boundary layer – a phenomenon known as a fern spike.</p>
+<p>That matched the theory nicely. Many modern ferns are opportunists. They cannot compete against plants with leaves, but if a piece of land is cleared by, say, a volcanic eruption, they are often the first things to set up shop there. An asteroid strike would have scoured much of the Earth of its vegetable cover, and provided a paradise for ferns. A fern spike in the rocks is thus a good indication that something terrible has happened.</p>
+<p>The surprises are how rapidly the new ichnotaxa appeared and how quickly they increased in size. Dr Olsen and his colleagues suggest that the explanation for this may be <span class="ev" data-q="7">a phenomenon called ecological release</span>. This is seen today when reptiles (which in modern times tend to be small creatures) reach islands <span class="ev" data-q="9">where they face no competitors</span>. The most spectacular example is on the Indonesian island of Komodo, where local lizards have grown so large that <span class="ev" data-q="8">they are often referred to as dragons</span>. The dinosaurs, in other words, could flourish only when the competition had been knocked out.</p>
+<p>That leaves the question of where the impact happened. No large hole in the Earth's crust seems to be 202 million years old. <span class="ev" data-q="10">It may, of course, have been overlooked.</span> Old craters are eroded and buried, and not always easy to find. <span class="ev" data-q="11">Alternatively, it may have vanished.</span> Although continental crust is more or less permanent, the ocean floor is constantly recycled by <span class="ev" data-q="12">the tectonic processes that bring about continental drift</span>. There is no ocean floor left that is more than 200 million years old, so a crater that formed in the ocean would have been swallowed up by now.</p>
+<p>There is a third possibility, however. This is that <span class="ev" data-q="13">the crater is known, but has been misdated</span>. The Manicouagan "structure", a crater in Quebec, is thought to be 214 million years old. It is huge – some 100 kilometres across – and seems to be the largest of between three and five craters that formed within a few hours of each other as the lumps of a disintegrated comet hit the Earth one by one. Such an impact would surely have had a perceptible effect on the world, but the rocks from 214 million years ago do not record one. It is possible, therefore, that Manicouagan has been misdated. That will be the next thing to check.</p>
+</div>
+</template>
+
+<template id="p2">
+<div class="passage">
+<div class="ptitle">Reading Passage 2</div>
+<p style="font-size:13px;color:var(--muted)">You should spend about 20 minutes on Questions 14–26, which are based on Reading Passage 2 below.</p>
+<h2>The discovery of a baby mammoth</h2>
+<p class="sub">A near-perfect frozen mammoth offers clues to a great vanished species</p>
+<div class="plabel">A</div>
+<p>On a May morning in 2007, on the Yamal Peninsula in northwestern Siberia, a Nenets reindeer herder named Yuri Khudi stood on a sandbar on the Yuribey River, looking carefully at a diminutive corpse. <span class="ev" data-q="17">Although he'd never seen such an animal before, Khudi had seen many mammoth tusks, the thick corkscrew shafts that his people found each summer, and this persuaded him the corpse was a baby mammoth.</span> It was eerily well preserved. Apart from its missing hair and toenails, it was perfectly intact. <span class="ev" data-q="22">Khudi realised the find might be significant and he knew he couldn't just return home and forget all about it.</span> He therefore decided to travel to the small town of Yar Sale to consult an old friend named Kirill Serotetto. His friend took him to meet the director of the local museum, who persuaded the local authorities to fly Khudi and Serotetto back to the Yuribey River to collect the baby mammoth.</p>
+<div class="plabel">B</div>
+<p>Mammoths became extinct between 14,000 and 10,000 years ago, and since the extinctions coincided with the end of the most recent Ice Age, many researchers believe that the primary cause of the great die-off was the sharp rise in temperature, <span class="ev" data-q="24">which dramatically altered the vegetation</span>. <span class="ev" data-q="19">"We have strong evidence that the temperature rise played a significant part in their extinction," says Adrian Lister, a palaeontologist and mammoth expert at London's Natural History Museum. "In Eurasia, the timing of the two events matches closely."</span> The extinctions also coincided, however, with the arrival of modern humans. <span class="ev" data-q="15">In addition to exploiting mammoths for food, they used their bones and tusks to make weapons, tools, and even dwellings.</span> Some scientists believe humans were as much to blame as the temperature rise for the great die-off. Some say they caused it.</p>
+<div class="plabel">C</div>
+<p>The body of the baby mammoth was eventually sent to the St Petersburg Zoological Museum in Russia. Alexei Tikhonov, the museum's director, was one of the first scientists to view the baby, a female. <span class="ev" data-q="21">According to Tikhonov, Khudi had rescued "the best preserved mammoth to come down to us from the Ice Age"</span>, and he gratefully named her Lyuba, after Khudi's wife. Tikhonov knew that no-one would be more excited by the find than Dan Fisher, an American colleague at the University of Michigan who had spent 30 years researching the lives of mammoths. Tikhonov invited Fisher, along with Bernard Buigues, a French mammoth hunter, to come and view the baby mammoth. <span class="ev" data-q="18">Fisher and Buigues had examined other specimens together, including infants, but these had been in a relatively poor state. Lyuba was another story entirely.</span> Other than the missing hair and toenails, the only flaw in her pristine appearance was a curious dent above the trunk.</p>
+<div class="plabel">D</div>
+<p>Fisher was particularly excited about one specific part of Lyuba's anatomy: her milk tusks. Through his career, Fisher has taken hundreds of tusk samples. Most of these came from the Great Lakes region of North America, and his research showed that these animals continued to thrive, despite the late Pleistocene* temperature change. On the other hand, <span class="ev" data-q="25">to Fisher the tusks often revealed telltale evidence of human hunting</span>. <span class="ev" data-q="23">His samples frequently came from animals that had died in the autumn, when they should have been at their peak after summer grazing, and less likely to die of natural causes, but also when humans would have been most eager to stockpile meat for the coming winter.</span> <span class="ev" data-q="14">He has done limited work in Siberia, but his analysis of tusks from Wrangel Island, off the coast of Siberia, suggests the same conclusion.</span></p>
+<div class="plabel">E</div>
+<p>In December 2007, Buigues arranged for the specimen to be transported to Japan to undergo a CT scan by Naoki Suzuki of the Jikei University School of Medicine. The test confirmed her skeleton was undamaged, and her internal organs seemed largely intact. It also showed that the end of her trunk, and her throat, mouth, and windpipe were filled with dense sediment. Six months later, in a laboratory in St Petersburg, Fisher, Buigues, Suzuki, Tikhonov and other colleagues began a three-day series of tests on Lyuba. During these, Fisher noted a dense mix of clay and sand in her trunk, mouth, and throat, which had been indicated earlier by the scan. <span class="ev" data-q="16">In fact, the sediment in Lyuba's trunk was packed so tightly that Fisher saw it as a possible explanation for the dent above her trunk.</span> If she was frantically fighting for breath and inhaled convulsively, perhaps a partial vacuum was created in the base of her trunk, which would have flattened surrounding soft tissue. <span class="ev" data-q="16b">To Fisher, the circumstances of Lyuba's death were clear: she had asphyxiated.</span> <span class="ev" data-q="22b">Suzuki, however, proposed a different interpretation, seeing more evidence for drowning than asphyxiation.</span></p>
+<div class="plabel">F</div>
+<p>Studies are ongoing, but Lyuba has begun to shed the secrets of her short life and some clues to the fate of her kind. <span class="ev" data-q="20">Her good general health was shown in the record of her dental development, a confirmation for Fisher that dental research is useful for evaluating health and thus key to investigating the causes of mammoth extinction.</span> Analysis of her well-preserved DNA has revealed that she belonged to a distinct population of <i>Mammuthus primigenius</i> and that, soon after her time, <span class="ev" data-q="26">another population migrating to Siberia from North America would take their place</span>. Finally, Lyuba's premolars and tusks revealed that she had been born in late spring and was only a month old when she died.</p>
+<p class="foot">* <i>Pleistocene: the geological period from about 2.6 million to 11,700 years ago, which included the most recent Ice Age</i></p>
+</div>
+</template>
+
+<template id="p3">
+<div class="passage">
+<div class="ptitle">Reading Passage 3</div>
+<p style="font-size:13px;color:var(--muted)">You should spend about 20 minutes on Questions 27–40, which are based on Reading Passage 3 below.</p>
+<h2>What makes a musical expert?</h2>
+<p class="sub">How does someone become expert in music? And is it really possible to have a 'talent' for music?</p>
+<p>Does that class of people acknowledged to be musical experts just have more of the same basic skills we are all endowed with, or do they have a set of abilities – or neural structures – that are totally different from those of the rest of us? Are high levels of musical achievement simply the result of training and practice, or are they <span class="ev" data-q="27">based on innate brain structure – what we refer to as 'talent'? Talent can be defined as something that originates in genetic structures and that is identifiable by trained people who can recognize its existence before a person has achieved exceptional levels of performance.</span> The emphasis on early identification means that, to investigate it, we study the development of skills in children.</p>
+<p>It is evident that some children acquire skills more rapidly than others: the age of onset for walking and talking varies widely, even between children in the same household. There may be genetic factors at work, but these are closely linked with other factors – with a presumably environmental component – such as motivation and family dynamics. Similar factors can influence musical development and can mask the contribution of genetics to musical ability.</p>
+<p>Brain studies, so far, haven't been of much use in sorting out the issues. Gottfried Schlaug at Harvard collected brain scans of individuals with absolute pitch* (AP) and showed that a region in the brain called the planum temporale is larger in these people than in others. This suggests that the planum is involved in AP, <span class="ev" data-q="28">but it's not clear if it starts out larger in people who eventually acquire AP, or if the acquisition of AP makes the planum increase in size</span>.</p>
+<p>Results of research into the areas of the brain involved in skilled motor movement are more conclusive. Studies of violin players have shown that the region of the brain responsible for controlling the movement of the left hand (the hand that requires greater precision in violin playing) <span class="ev" data-q="29">increases in size as a result of practice</span>. We do not know yet if the propensity for increase pre-exists in some people and not others.</p>
+<p><span class="ev" data-q="30">The evidence against talent comes from research on how much training the experts do.</span> Like experts in mathematics, chess, or sports, experts in music require lengthy periods of instruction and practice. In several studies, the very best music students were found to have practiced more than twice as much as the others. In another study, students were secretly divided into two groups based on teachers' perceptions of their talent. Several years later, it was found that the students who achieved the highest performance ratings had practiced the most, irrespective of which 'talent' group they had been assigned to, <span class="ev" data-q="30b">suggesting that practice does not merely correlate with achievement, but causes it</span>.</p>
+<p><span class="ev" data-q="31">Anders Ericsson, at Florida State University, approaches the topic of musical expertise as a general problem in cognitive psychology.</span> He takes as a starting point the assumption that there are certain issues involved in becoming an expert at anything; that we can learn about musical expertise by studying expert chess players, athletes, artists, mathematicians, as well as the musicians themselves. The emerging picture from such studies is that ten thousand hours are required to achieve the level of mastery associated with being a world-class expert – in anything. <span class="ev" data-q="32">In study after study, of composers, ice skaters, concert pianists, chess players and master criminals, this number comes up again and again.</span> Someone would do this amount of practice if they practiced, for example, <span class="ev" data-q="33">roughly 20 hours a week for ten years</span>. Of course, <span class="ev" data-q="34">this doesn't address why some people don't seem to get anywhere when they practice, and why some people get more out of their practice sessions than others</span>. <span class="ev" data-q="35">But no-one has yet found a case in which true world-class expertise was accomplished in less time.</span> It seems that it takes the brain this long to assimilate all that it needs to know to achieve true mastery.</p>
+<p><span class="ev" data-q="36">The ten-thousand-hour theory is consistent with what we know about how the brain learns.</span> Learning requires the assimilation and consolidation of information in neural tissue. The more experiences we have with something, the stronger the memory/learning trace for that experience becomes. Although people differ in how long it takes them to consolidate information neurally, <span class="ev" data-q="36b">it remains true that increased practice leads to a greater number of neural traces, which create stronger memory representation</span>.</p>
+<p>The classic rebuttal to this theory goes something like this: 'What about Mozart? I hear that he composed his first symphony at the age of four!' First, there is a factual error here: <span class="ev" data-q="38">Mozart didn't write it until he was eight</span>. Still, this is unusual, to say the least. However, <span class="ev" data-q="39">this early work received little acclaim and was not performed very often</span>. In fact, the only reason we know about it is because the child who wrote it grew up to become Mozart. <span class="ev" data-q="37">And Mozart had an expert teacher in his father, who was renowned as a teacher of musicians all over Europe.</span> We don't know how much Mozart practiced, but if he started at age two and worked thirty-two hours a week (quite possible, given that his father was a stern taskmaster), he would have made his ten thousand hours by the time he composed his first symphony. This does not mean that there are no genetic factors involved in Mozart's greatness, but that <span class="ev" data-q="40">inborn traits may not be the only cause</span>.</p>
+<p class="foot">* <i>absolute pitch: the ability to identify or produce a musical note without hearing a reference note</i></p>
+</div>
+</template>
+
+<script>
+/* ================== CONFIG ================== */
+/* >>> DÁN LINK /exec CỦA FILE HỨNG VÀO GIỮA HAI DẤU NGOẶC KÉP <<< */
+var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxIBTgYNdOQ1FcvAe8ppres-jVJwtF8i8xhFY0aTbFyPMd274V-vyjsNWLU6XlxaFY/exec";
+var TEST_KEY = "reading_mammoth";
+var TEST_ID = "IELTS Reading - Footprints / Baby mammoth / Musical expert";
+var MAX_ATTEMPTS = 5;
+/*REVIEW_DATA*/
+
+/* Phiên bản câu hỏi cho từng nhóm câu (8 nhóm) ở mỗi lần làm */
+var PLAN = [null,
+  [0,0,0,0,0,0,0,0],
+  [1,1,1,1,1,1,1,1],
+  [2,2,2,2,2,2,2,2],
+  [1,2,1,2,1,2,1,2],
+  [2,1,2,1,2,1,2,1]
+];
+
+/* ================== GIẢI THÍCH (theo nội dung bài đọc) ================== */
+var EXPL = {
+ 1:"Đoạn 1: “Everybody knows that the dinosaurs became extinct as a result of a large asteroid” → ai cũng công nhận, không còn nghi ngờ.",
+ 2:"Đoạn 2: khủng long kỷ Jura được miêu tả “realistically” (chân thực) trong sách và phim, không phải bị phóng đại.",
+ 3:"Đoạn 2: nhóm Olsen KHÔNG phải người đầu tiên cho rằng thiên thạch giúp khủng long thống trị, nhưng là người đầu tiên chứng minh việc này xảy ra rất nhanh. Bài không nói các nhà khoa học khác phản ứng thế nào.",
+ 4:"Đoạn 3: bộ xương khủng long hiếm, còn dấu chân lại “surprisingly abundant” (nhiều một cách bất ngờ).",
+ 5:"Đoạn 4: ichnotaxa không khớp chính xác được với một loài, chỉ khớp được với một nhóm động vật chung.",
+ 6:"Đoạn 5: 4 nhóm dấu chân vượt qua ranh giới sang kỷ Jura, và 3 nhóm mới xuất hiện ngay khi kỷ Jura bắt đầu.",
+ 7:"Đoạn 8: nhóm Olsen cho rằng nguyên nhân có thể là “a phenomenon called ecological release”.",
+ 8:"Đoạn 8: thằn lằn ở Komodo to đến mức “they are often referred to as dragons”.",
+ 9:"Đoạn 8: bò sát lớn nhanh khi đến những hòn đảo “where they face no competitors” (không có đối thủ cạnh tranh).",
+ 10:"Đoạn 9, khả năng 1: “It may, of course, have been overlooked.” (bị bỏ sót).",
+ 11:"Đoạn 9, khả năng 2: “Alternatively, it may have vanished.” (đã biến mất).",
+ 12:"Đoạn 9: đáy đại dương liên tục bị tái tạo bởi “the tectonic processes that bring about continental drift”.",
+ 13:"Đoạn 10, khả năng 3: “the crater is known, but has been misdated” (bị xác định sai niên đại).",
+ 14:"Đoạn D: Fisher nghiên cứu ngà voi ở vùng Great Lakes (Bắc Mỹ), và phân tích ngà ở đảo Wrangel (gần Siberia) cũng cho ra cùng kết luận.",
+ 15:"Đoạn B: con người dùng xương và ngà voi ma mút làm vũ khí, công cụ, thậm chí nhà ở.",
+ 16:"Đoạn E: Fisher cho rằng lớp trầm tích nén chặt trong vòi có thể giải thích vết lõm phía trên vòi. Cũng trong đoạn E, Fisher nghĩ Lyuba chết ngạt, còn Suzuki nghĩ cô bé chết đuối.",
+ 17:"Đoạn A: Khudi chưa từng thấy con vật như vậy, nhưng đã thấy nhiều ngà voi ma mút nên nhận ra đây là voi ma mút con. Ông hiểu phát hiện này quan trọng nên đi tìm người giúp.",
+ 18:"Đoạn C: các xác voi con mà Fisher và Buigues từng xem đều ở tình trạng khá tệ, còn Lyuba thì hoàn toàn khác.",
+ 19:"Đoạn B: Adrian Lister nói có bằng chứng mạnh rằng nhiệt độ tăng góp phần lớn vào sự tuyệt chủng, và ở Âu–Á thời điểm hai sự kiện trùng khớp.",
+ 20:"Đoạn F: hồ sơ phát triển răng cho thấy Lyuba khoẻ mạnh, và khẳng định với Fisher rằng nghiên cứu răng là chìa khoá tìm nguyên nhân voi ma mút tuyệt chủng.",
+ 21:"Đoạn C: Tikhonov nói Lyuba là con voi ma mút được bảo quản tốt nhất từ Kỷ Băng hà.",
+ 22:"Đoạn A: Khudi nhận ra phát hiện này có thể quan trọng và không thể về nhà rồi quên đi. Đoạn E: Suzuki cho rằng Lyuba chết đuối hơn là chết ngạt.",
+ 23:"Đoạn D: mẫu của Fisher thường từ những con chết vào mùa thu, lúc lẽ ra chúng khoẻ nhất sau mùa hè ăn cỏ, và cũng là lúc con người muốn tích trữ thịt cho mùa đông.",
+ 24:"Đoạn B: nhiệt độ tăng mạnh “dramatically altered the vegetation” (thảm thực vật).",
+ 25:"Đoạn D: với Fisher, ngà voi thường cho thấy dấu hiệu bị con người săn bắt (human hunting).",
+ 26:"Đoạn F: ngay sau thời của Lyuba, một quần thể khác di cư từ Bắc Mỹ (North America) sang Siberia thay thế.",
+ 27:"Đoạn 1: tài năng dựa trên cấu trúc não bẩm sinh và bắt nguồn từ gen, và có thể nhận ra TRƯỚC khi người đó đạt thành tích vượt trội.",
+ 28:"Đoạn 3: chưa rõ planum temporale to sẵn từ đầu ở người sau này có AP, hay việc có AP làm nó to ra → chưa rõ là nguyên nhân hay kết quả.",
+ 29:"Đoạn 4: vùng não điều khiển tay trái to lên nhờ luyện tập. Nhưng chưa biết khả năng to lên này có sẵn ở một số người hay không.",
+ 30:"Đoạn 5: bằng chứng chống lại 'tài năng' đến từ nghiên cứu về lượng luyện tập. Học sinh luyện nhiều nhất đạt kết quả cao nhất, dù được xếp vào nhóm 'tài năng' nào → luyện tập là nguyên nhân dẫn đến thành tích.",
+ 31:"Đoạn 6: Ericsson xem chuyên môn âm nhạc như một vấn đề chung của tâm lý học nhận thức. Bài không nói công trình của ông ảnh hưởng đến, hay bị phê bình bởi, người khác.",
+ 32:"Đoạn 6: ở mọi lĩnh vực (nhà soạn nhạc, VĐV trượt băng, kỳ thủ, tội phạm…) con số 10.000 giờ lặp đi lặp lại.",
+ 33:"Đoạn 6: 20 giờ/tuần trong 10 năm chỉ là VÍ DỤ để đạt 10.000 giờ. Bài không nói phải luyện mỗi ngày, không nói lịch nào hiệu quả nhất hay số năm tối thiểu.",
+ 34:"Đoạn 6: lý thuyết này không giải thích vì sao có người luyện mãi không tiến bộ, và vì sao có người thu được nhiều hơn từ buổi tập.",
+ 35:"Đoạn 6: chưa ai tìm thấy trường hợp đạt trình độ đẳng cấp thế giới với ít thời gian hơn.",
+ 36:"Đoạn 7: lý thuyết 10.000 giờ phù hợp với hiểu biết về cách não học. Luyện tập nhiều hơn tạo nhiều dấu vết thần kinh hơn và trí nhớ mạnh hơn.",
+ 37:"Đoạn cuối: cha của Mozart là một thầy giáo giỏi (expert teacher), nổi tiếng khắp châu Âu → Mozart được cha dạy rất nhiều.",
+ 38:"Đoạn cuối: Mozart viết bản giao hưởng đầu tiên lúc 8 tuổi (không phải 4 tuổi như người ta hay nói).",
+ 39:"Đoạn cuối: tác phẩm này ít được ca ngợi (little acclaim) và hiếm khi được biểu diễn → không phổ biến.",
+ 40:"Đoạn cuối: đặc điểm bẩm sinh (inborn traits) có thể không phải nguyên nhân duy nhất."
+};
+
+/* ================== NGÂN HÀNG CÂU HỎI ================== */
+var PEOPLE = ["Yuri Khudi","Kirill Serotetto","Adrian Lister","Alexei Tikhonov","Dan Fisher","Bernard Buigues","Naoki Suzuki"];
+var SETS = [
+ /* A: Q1-6 */
+ {from:1,to:6,p:0,v:[
+  {type:"tfng",items:[
+   {s:"There is still doubt about the theory that an asteroid strike killed the dinosaurs.",a:"FALSE"},
+   {s:"Books and the cinema have exaggerated the size of dinosaurs.",a:"FALSE"},
+   {s:"Other scientists have rejected Olsen's idea of a sudden dinosaur occupation of the Earth.",a:"NOT GIVEN"},
+   {s:"Dinosaur footprints are found more frequently than dinosaur skeletons.",a:"TRUE"},
+   {s:"Ichnotaxa offer an exact identification of a dinosaur species.",a:"FALSE"},
+   {s:"There is evidence that some groups of dinosaur survived from the Triassic period into the Jurassic period.",a:"TRUE"}]},
+  {type:"tfng",items:[
+   {s:"It is widely accepted that an asteroid impact caused the dinosaurs to die out.",a:"TRUE"},
+   {s:"Modern films and books show dinosaurs as far larger than they actually were.",a:"FALSE"},
+   {s:"Olsen's team were the first to suggest that an asteroid helped dinosaurs take over the Earth.",a:"FALSE"},
+   {s:"Dinosaur skeletons are easier to find than dinosaur footprints.",a:"FALSE"},
+   {s:"Ichnotaxa can be linked to a general type of animal but not to one particular species.",a:"TRUE"},
+   {s:"All of the footprint types studied disappeared before the Jurassic period began.",a:"FALSE"}]},
+  {type:"tfng",items:[
+   {s:"Scientists are now uncertain whether an asteroid was responsible for the dinosaurs' extinction.",a:"FALSE"},
+   {s:"Dinosaurs are shown accurately in today's books and films.",a:"TRUE"},
+   {s:"Olsen's findings have been widely praised by other palaeontologists.",a:"NOT GIVEN"},
+   {s:"Dinosaur footprints are surprisingly rare in the fossil record.",a:"FALSE"},
+   {s:"Each ichnotaxon matches one specific species of dinosaur.",a:"FALSE"},
+   {s:"Some types of footprint first appear very soon after the Jurassic period begins.",a:"TRUE"}]}
+ ]},
+ /* B: Q7-13 */
+ {from:7,to:13,p:0,v:[
+  {type:"gapsum",words:"TWO WORDS",title:"",
+   text:"Dr Olsen's group believe that the sudden increase in the size of dinosaurs may have been due to something known as [[7]]. A current example of this can be found on Komodo Island in Indonesia, where some of the lizards are commonly called [[8]] because of their size. Apparently, they have grown this big because they do not have any [[9]]. The asteroid strike that may have cleared the way for dinosaurs to become the dominant group probably occurred 202 million years ago.<br><br>According to the writer, there are three possible reasons why we have not found a large hole in the Earth's crust dating back 202 million years. First, it may have been [[10]] by scientists, because craters are easily covered up. Or, it could have [[11]]; for example, if the hole had been in the ocean, it would no longer exist because of the [[12]] that produce continental drift. Thirdly, the hole could still exist but have been [[13]].",
+   items:[{a:["ecological release"]},{a:["dragons"]},{a:["competitors"]},{a:["overlooked"]},{a:["vanished"]},{a:["tectonic processes"]},{a:["misdated"]}]},
+  {type:"gapsum",words:"TWO WORDS",title:"",
+   text:"According to Dr Olsen and his team, the speed at which the new dinosaur types grew bigger could be explained by [[7]]. This can still be seen today on the island of Komodo, where lizards have become so big that people often call them [[8]]. They have been able to grow this large because there are no [[9]] on the island to hold them back.<br><br>As for the missing crater, the writer offers three explanations. It may simply have been [[10]], since old craters are worn away and buried over time. It may also have [[11]], because the sea floor is continually destroyed and renewed by [[12]]. Finally, the crater may already be known but have been [[13]].",
+   items:[{a:["ecological release"]},{a:["dragons"]},{a:["competitors"]},{a:["overlooked"]},{a:["vanished"]},{a:["tectonic processes"]},{a:["misdated"]}]},
+  {type:"banksum",title:"",
+   text:"According to Dr Olsen and his team, the speed at which the new dinosaur types grew bigger could be explained by [[7]]. This can still be seen today on the island of Komodo, where lizards have become so big that people often call them [[8]]. They have been able to grow this large because there are no [[9]] on the island to hold them back.<br><br>As for the missing crater, the writer offers three explanations. It may simply have been [[10]], since old craters are worn away and buried over time. It may also have [[11]], because the sea floor is continually destroyed and renewed by [[12]]. Finally, the crater may already be known but have been [[13]].",
+   bank:["ecological release","dragons","competitors","overlooked","vanished","tectonic processes","misdated","volcanic eruptions","predators","monsters","fern spores","eroded"],
+   items:[{a:"ecological release"},{a:"dragons"},{a:"competitors"},{a:"overlooked"},{a:"vanished"},{a:"tectonic processes"},{a:"misdated"}]}
+ ]},
+ /* C: Q14-18 */
+ {from:14,to:18,p:1,v:[
+  {type:"para",items:[
+   {s:"similarities between studies of mammoth remains from different parts of the world",a:"D"},
+   {s:"details of the uses to which mammoth body parts were put",a:"B"},
+   {s:"a theory that accounts for the damage to Lyuba's face",a:"E"},
+   {s:"an explanation of how an individual was able to identify a small corpse",a:"A"},
+   {s:"a comparison between Lyuba and other young mammoth corpses",a:"C"}]},
+  {type:"para",items:[
+   {s:"evidence from two separate regions that points to the same conclusion",a:"D"},
+   {s:"a list of things that people made from parts of mammoths",a:"B"},
+   {s:"a possible reason for a mark on the baby mammoth's head",a:"E"},
+   {s:"how earlier experience helped someone recognise what he had found",a:"A"},
+   {s:"a reference to the poor condition of earlier specimens",a:"C"}]},
+  {type:"para",items:[
+   {s:"a mention of research carried out on an island near Siberia",a:"D"},
+   {s:"the ways in which early humans made use of mammoth remains",a:"B"},
+   {s:"two different opinions about how Lyuba died",a:"E",ev:["16b","22b"]},
+   {s:"the reason why a herder decided to seek help with his discovery",a:"A",ev:["22"]},
+   {s:"why one scientist considered Lyuba unlike other young mammoths",a:"C"}]}
+ ]},
+ /* D: Q19-23 */
+ {from:19,to:23,p:1,v:[
+  {type:"people",items:[
+   {s:"The indications are that mammoths died as a result of climate change.",a:"Adrian Lister"},
+   {s:"Teeth analysis is important in discovering why mammoths died out.",a:"Dan Fisher"},
+   {s:"The corpse of the baby mammoth is in better condition than any other that has been discovered.",a:"Alexei Tikhonov"},
+   {s:"It would be a mistake to ignore the baby mammoth's discovery, because of its potential importance.",a:"Yuri Khudi"},
+   {s:"Mammoths often died at a time of year when they should have been in good physical condition.",a:"Dan Fisher"}]},
+  {type:"people",items:[
+   {s:"A rise in temperature appears to have been a major factor in the extinction of mammoths.",a:"Adrian Lister"},
+   {s:"Studying how teeth develop can help explain the disappearance of mammoths.",a:"Dan Fisher"},
+   {s:"No mammoth from the Ice Age has been found in better condition than this one.",a:"Alexei Tikhonov"},
+   {s:"The discovery was too important to simply leave and forget about.",a:"Yuri Khudi"},
+   {s:"Many mammoths died in a season when they ought to have been healthy and well-fed.",a:"Dan Fisher"}]},
+  {type:"people",items:[
+   {s:"In Eurasia, the disappearance of mammoths happened at the same time as climate change.",a:"Adrian Lister"},
+   {s:"The baby mammoth's teeth show that she was generally healthy.",a:"Dan Fisher"},
+   {s:"The baby mammoth is the best-preserved specimen ever found from the Ice Age.",a:"Alexei Tikhonov"},
+   {s:"Lyuba is more likely to have drowned than to have suffocated.",a:"Naoki Suzuki",ev:["22b"]},
+   {s:"The time of year when many mammoths died suggests that humans killed them.",a:"Dan Fisher"}]}
+ ]},
+ /* E: Q24-26 */
+ {from:24,to:26,p:1,v:[
+  {type:"sent",words:"TWO WORDS",items:[
+   {s:"Some researchers say that a marked rise in temperature impacted on mammoths by changing the type of [[24]] available.",a:["vegetation"]},
+   {s:"Fisher concluded that many of the mammoth tusks he looked at displayed signs of [[25]].",a:["human hunting","hunting"]},
+   {s:"Not long after Lyuba's death, the <i>Mammuthus primigenius</i> group she belonged to was replaced by another group that came from [[26]].",a:["north america"]}]},
+  {type:"sent",words:"TWO WORDS",items:[
+   {s:"Many researchers believe the sharp temperature rise greatly changed the [[24]] that mammoths depended on.",a:["vegetation"]},
+   {s:"According to Fisher, the tusks he examined frequently showed evidence of [[25]].",a:["human hunting","hunting"]},
+   {s:"DNA analysis shows that a population from [[26]] later took the place of Lyuba's group in Siberia.",a:["north america"]}]},
+  {type:"short",words:"TWO WORDS",items:[
+   {s:"What did the rise in temperature at the end of the Ice Age dramatically alter?",a:["vegetation","the vegetation"]},
+   {s:"According to Fisher, what did the mammoth tusks often show evidence of?",a:["human hunting","hunting"]},
+   {s:"Where did the population that replaced Lyuba's group migrate from?",a:["north america"]}]}
+ ]},
+ /* F: Q27-30 */
+ {from:27,to:30,p:2,v:[
+  {type:"mcq",items:[
+   {s:"In the first paragraph, the writer suggests that a musician who is 'talented' is someone",o:["who is aware of being set apart from other people.","whose brain structure is unlike that of other people.","who can perform extremely well in early childhood.","whose essential skills are more varied than those of ordinary people."],a:1},
+   {s:"According to the writer, what is unclear about the findings of Gottfried Schlaug?",o:["which part of the brain is linked to a particular musical skill","which type of musical skill leads to the greatest change in the brain","whether a feature of the brain is a cause or an effect of a musical skill","whether the acquisition of a musical skill is easier for some people than others"],a:2},
+   {s:"According to the writer, what has been established by studies of violin players?",o:["Changes may occur in the brain following violin practice.","Left-handed violinists have a different brain structure from other people.","A violinist's hand size is not due to practice but to genetic factors.","Violinists are born with brains that have a particular structure."],a:0},
+   {s:"According to the writer, findings on the amount of practice done by expert musicians suggest that",o:["talent may have little to do with expertise.","practice may actually prevent the development of talent.","talent may not be recognised by teachers.","expertise may be related to quality of instruction."],a:0}]},
+  {type:"mcq",items:[
+   {s:"What does the writer say about 'talent' in the first paragraph?",o:["It can only be recognised after a person becomes successful.","It is thought to come from a person's genes and brain structure.","It means having a larger number of the same basic skills.","It can be measured by testing how quickly children learn."],a:1},
+   {s:"Gottfried Schlaug's research leaves which question unanswered?",o:["whether people with absolute pitch can be found using brain scans","whether a larger planum temporale is a cause or a result of absolute pitch","which other regions of the brain are involved in absolute pitch","how common absolute pitch is among professional musicians"],a:1},
+   {s:"What do studies of violin players show?",o:["Practice can cause one part of the brain to grow larger.","Some people are born with a larger left-hand brain region.","Violinists need more practice than other types of musician.","Left-hand movement is controlled by both sides of the brain."],a:0},
+   {s:"What does research on how much experts train suggest?",o:["Students labelled as talented usually practise less than others.","Practice, rather than talent, is what leads to high achievement.","Teachers are good at identifying talented students at an early age.","The best students receive more lessons from their teachers."],a:1,ev:["30b"]}]},
+  {type:"mcq",items:[
+   {s:"According to the writer, 'talent' is something that",o:["is based on genetic structures in the brain.","develops only after many years of practice.","can be seen only in exceptional performers.","is mainly affected by family and motivation."],a:0},
+   {s:"What does the writer say about the planum temporale?",o:["It is not known whether its size comes before or after absolute pitch.","It is the only part of the brain that is involved in absolute pitch.","It is smaller in people who have never played a musical instrument.","Its size can be changed by any kind of musical training at all."],a:0},
+   {s:"Research on violinists is described as more conclusive because it shows that",o:["practice leads to a measurable change in the brain.","a talent for the violin is already present at birth.","the right hand needs less precision than the left.","only some people's brains respond to practice."],a:0},
+   {s:"From the study where students were secretly put into groups, the writer concludes that",o:["teachers' opinions of talent predicted later success.","the amount of practice caused higher achievement.","talented students needed less practice to do well.","both groups practised for the same amount of time."],a:1,ev:["30b"]}]}
+ ]},
+ /* G: Q31-36 */
+ {from:31,to:36,p:2,v:[
+  {type:"ynng",items:[
+   {s:"Anders Ericsson's work with cognitive psychology has influenced other researchers.",a:"NOT GIVEN"},
+   {s:"Different areas of expertise seem to have one specific thing in common.",a:"YES"},
+   {s:"In order to be useful, practice must be carried out regularly every day.",a:"NOT GIVEN"},
+   {s:"Anyone who practices for long enough can reach the level of a world-class expert.",a:"NO"},
+   {s:"Occasionally, someone can become an expert at global level with fewer than 10,000 hours' practice.",a:"NO"},
+   {s:"Existing knowledge of learning and cognitive skills supports the importance of practice.",a:"YES"}]},
+  {type:"ynng",items:[
+   {s:"Ericsson treats musical expertise as part of a wider question about how people become experts.",a:"YES"},
+   {s:"The figure of 10,000 hours applies only to musicians.",a:"NO"},
+   {s:"Practising for 20 hours a week is the most effective way to train.",a:"NOT GIVEN"},
+   {s:"The writer explains why some people benefit more from practice than others.",a:"NO"},
+   {s:"No one has been found who reached world-class level in fewer than 10,000 hours.",a:"YES"},
+   {s:"The 10,000-hour theory conflicts with what is known about how the brain learns.",a:"NO"}]},
+  {type:"ynng",items:[
+   {s:"Ericsson's research has been criticised by other psychologists.",a:"NOT GIVEN"},
+   {s:"Studies of very different experts, including criminals, have produced the same figure for practice time.",a:"YES"},
+   {s:"Ten years is the minimum time needed to become a world-class expert.",a:"NOT GIVEN"},
+   {s:"Everyone gets the same benefit from their practice sessions.",a:"NO"},
+   {s:"Some exceptional people need far fewer than 10,000 hours to reach mastery.",a:"NO"},
+   {s:"More practice creates stronger memory representations in the brain.",a:"YES",ev:["36b"]}]}
+ ]},
+ /* H: Q37-40 */
+ {from:37,to:40,p:2,v:[
+  {type:"banksum",title:"Mozart",
+   text:"The case of Mozart could be quoted as evidence against the 10,000-hour-practice theory. However, the writer points out that the young Mozart received a lot of [[37]] from his father, and that the symphony he wrote at the age of [[38]] was not [[39]] and may be of only academic interest. The case therefore supports the view that expertise is not solely the result of [[40]] characteristics.",
+   bank:["popular","artistic","completed","eight","tuition","encouragement","inherited","four","practice","two"],
+   items:[{a:"tuition"},{a:"eight"},{a:"popular"},{a:"inherited"}]},
+  {type:"banksum",title:"Mozart",
+   text:"People often mention Mozart to argue that experts do not need 10,000 hours of practice. The writer, however, notes that Mozart was given a great deal of [[37]] by his father. His first symphony was written when he was [[38]], not four, and it was never very [[39]]. This suggests that Mozart's success was not simply due to [[40]] characteristics.",
+   bank:["popular","artistic","completed","eight","tuition","encouragement","inherited","four","practice","two"],
+   items:[{a:"tuition"},{a:"eight"},{a:"popular"},{a:"inherited"}]},
+  {type:"gapsum",words:"ONE WORD ONLY",title:"Mozart",
+   text:"Mozart's father was an expert [[37]] who was famous for training musicians all over Europe. Mozart wrote his first symphony at the age of [[38]], and the work received little [[39]] at the time. The writer argues that inborn [[40]] may not fully explain Mozart's greatness.",
+   items:[{a:["teacher"]},{a:["eight","8"]},{a:["acclaim"]},{a:["traits"]}]}
+ ]}
+];
+
+/* ================== STATE ================== */
+var REVIEW = window.REVIEW_DATA || null;
+var IS_POPUP = /[?&]popup=1/.test(location.search);
+var attempt = 1, answers = {}, hls = [], hist = [], submitted = false;
+var startTime = Date.now(), elapsedBefore = 0, timerId = null;
+var current = 0, selectedChip = null;
+var KEYS = {}, BANKS = {}, DROPSET = {};
+var leftEl = document.getElementById('left'), rightEl = document.getElementById('right');
+var leftWraps = [], rightWraps = [];
+var nameInput = document.getElementById('stuName');
+var classInput = document.getElementById('stuClass');
+
+/* seeded shuffle */
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function shuffled(arr,seed){var a=arr.slice(),r=rng(seed);for(var i=a.length-1;i>0;i--){var j=Math.floor(r()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+var LET="ABCDEFGHIJKLMNOP";
+
+/* ================== RENDER ================== */
+function slot(n){return '<span class="slot" id="s'+n+'"></span>';}
+function expl(n){return '<div class="expl" id="x'+n+'"></div>';}
+function gapInput(n){return '<input class="gap" data-q="'+n+'" id="g'+n+'" placeholder="'+n+'" autocomplete="off" spellcheck="false">'+slot(n);}
+function dropBox(n,sid){return '<span class="drop" data-q="'+n+'" data-set="'+sid+'" id="d'+n+'"><b>'+n+'</b></span>'+slot(n);}
+function fillTokens(text,fn){return text.replace(/\[\[(\d+)\]\]/g,function(m,n){return fn(+n);});}
+function range(s){return s.from+'–'+s.to;}
+
+function renderSet(set,si){
+  var vi=PLAN[attempt][si], ver=set.v[vi], h='<div class="qset"><h3>Questions '+range(set)+'</h3>', pn=set.p+1;
+  var seed=attempt*7919+si*131;
+  var shuffle = attempt>1;
+  var t=ver.type;
+  if(t==="tfng"||t==="ynng"){
+    var opts=t==="tfng"?["TRUE","FALSE","NOT GIVEN"]:["YES","NO","NOT GIVEN"];
+    h+= t==="tfng"
+      ? '<p class="ins">Do the following statements agree with the information given in Reading Passage '+pn+'?</p><p class="ins">In boxes <b>'+range(set)+'</b> on your answer sheet, write</p><div class="legend"><b>TRUE</b><span>if the statement agrees with the information</span><b>FALSE</b><span>if the statement contradicts the information</span><b>NOT GIVEN</b><span>if there is no information on this</span></div>'
+      : '<p class="ins">Do the following statements agree with the claims of the writer in Reading Passage '+pn+'?</p><p class="ins">In boxes <b>'+range(set)+'</b> on your answer sheet, write</p><div class="legend"><b>YES</b><span>if the statement agrees with the claims of the writer</span><b>NO</b><span>if the statement contradicts the claims of the writer</span><b>NOT GIVEN</b><span>if it is impossible to say what the writer thinks about this</span></div>';
+    ver.items.forEach(function(it,k){var n=set.from+k;
+      KEYS[n]={kind:"letter",a:it.a,disp:it.a,ev:it.ev};
+      h+='<div class="q" id="q'+n+'"><div class="stem"><span class="qn">'+n+'</span>'+it.s+slot(n)+'</div><div class="opts">';
+      opts.forEach(function(o){h+='<label data-v="'+o+'"><input type="radio" name="r'+n+'" value="'+o+'"> '+o+'</label>';});
+      h+='</div>'+expl(n)+'</div>';
+    });
+  }
+  else if(t==="mcq"){
+    h+='<p class="ins">Choose the correct letter, <b>A, B, C</b> or <b>D</b>.</p><p class="ins">Write the correct letter in boxes <b>'+range(set)+'</b> on your answer sheet.</p>';
+    ver.items.forEach(function(it,k){var n=set.from+k;
+      var order=shuffle?shuffled([0,1,2,3],seed+k):[0,1,2,3];
+      var L=LET[order.indexOf(it.a)];
+      KEYS[n]={kind:"letter",a:L,disp:L,ev:it.ev};
+      h+='<div class="q" id="q'+n+'"><div class="stem"><span class="qn">'+n+'</span>'+it.s+slot(n)+'</div><div class="opts">';
+      order.forEach(function(oi,j){h+='<label data-v="'+LET[j]+'"><input type="radio" name="r'+n+'" value="'+LET[j]+'"> <span><b>'+LET[j]+'</b>&nbsp; '+it.o[oi]+'</span></label>';});
+      h+='</div>'+expl(n)+'</div>';
+    });
+  }
+  else if(t==="para"||t==="people"){
+    var letters, names=null;
+    if(t==="para"){
+      letters=["A","B","C","D","E","F"];
+      h+='<p class="ins">Reading Passage '+pn+' has six paragraphs, <b>A–F</b>.</p><p class="ins">Which paragraph contains the following information?</p><p class="ins">Write the correct letter, <b>A–F</b>, in boxes <b>'+range(set)+'</b> on your answer sheet.</p>';
+    } else {
+      names=shuffle?shuffled(PEOPLE,seed):PEOPLE.slice();
+      letters=names.map(function(_,i){return LET[i];});
+      h+='<p class="ins">Look at the following statements (Questions '+range(set)+') and the list of people below. Match each statement with the correct person, <b>A–G</b>.</p><p class="ins">Write the correct letter, <b>A–G</b>, in boxes <b>'+range(set)+'</b> on your answer sheet.</p><p class="ins"><b>NB&nbsp;&nbsp;You may use any letter more than once.</b></p><p class="ins" style="margin-top:8px"><b>List of People</b></p><div class="people">';
+      names.forEach(function(nm,i){h+='<b>'+LET[i]+'</b><span>'+nm+'</span>';});
+      h+='</div>';
+    }
+    h+='<table class="grid"><tr><th style="text-align:left">Question</th>';
+    letters.forEach(function(L){h+='<th>'+L+'</th>';});h+='</tr>';
+    ver.items.forEach(function(it,k){var n=set.from+k;
+      var L= t==="para"?it.a:LET[names.indexOf(it.a)];
+      KEYS[n]={kind:"letter",a:L,disp: t==="para"?L:(L+' '+it.a),ev:it.ev};
+      h+='<tr class="q-row" id="q'+n+'"><td><span class="qn">'+n+'</span>'+it.s+slot(n)+expl(n)+'</td>';
+      letters.forEach(function(L2){h+='<td class="c" data-v="'+L2+'"><label><input type="radio" name="r'+n+'" value="'+L2+'"></label></td>';});
+      h+='</tr>';
+    });
+    h+='</table>';
+  }
+  else if(t==="gapsum"){
+    h+='<p class="ins">Complete the summary below.</p><p class="ins">Choose <b>NO MORE THAN '+ver.words+'</b> from the passage for each answer.</p><p class="ins">Write your answers in boxes <b>'+range(set)+'</b> on your answer sheet.</p>';
+    if(ver.words==="ONE WORD ONLY") h=h.replace('NO MORE THAN ONE WORD ONLY','ONE WORD ONLY');
+    ver.items.forEach(function(it,k){var n=set.from+k;KEYS[n]={kind:"text",a:it.a,disp:it.a[0],ev:it.ev};});
+    h+='<div class="summary">'+(ver.title?'<h4>'+ver.title+'</h4>':'')+fillTokens(ver.text,gapInput)+'</div>';
+    ver.items.forEach(function(it,k){h+=expl(set.from+k);});
+  }
+  else if(t==="banksum"){
+    var sid="b"+si, words=shuffle?shuffled(ver.bank,seed):ver.bank.slice(), map={};
+    words.forEach(function(w,i){map[LET[i]]=w;});
+    BANKS[sid]=map;
+    var lastL=LET[words.length-1];
+    h+='<p class="ins">Complete the summary using the list of words, <b>A–'+lastL+'</b>, below.</p><p class="ins">Write the correct letter, <b>A–'+lastL+'</b>, in boxes <b>'+range(set)+'</b> on your answer sheet.</p><p class="ins" style="font-size:13px;color:var(--muted)">(Kéo thả từ vào ô trống, hoặc bấm chọn từ rồi bấm vào ô. Bấm vào ô đã điền để xoá.)</p>';
+    ver.items.forEach(function(it,k){var n=set.from+k;var L=LET[words.indexOf(it.a)];KEYS[n]={kind:"letter",a:L,disp:L+' '+it.a,ev:it.ev};DROPSET[n]=sid;});
+    h+='<div class="summary">'+(ver.title?'<h4>'+ver.title+'</h4>':'')+fillTokens(ver.text,function(n){return dropBox(n,sid);})+'</div>';
+    ver.items.forEach(function(it,k){h+=expl(set.from+k);});
+    h+='<div class="bank">'+words.map(function(w,i){return '<span class="chip" draggable="true" data-set="'+sid+'" data-v="'+LET[i]+'"><b>'+LET[i]+'</b>&nbsp; '+w+'</span>';}).join('')+'</div>';
+  }
+  else if(t==="sent"){
+    h+='<p class="ins">Complete the sentences below.</p><p class="ins">Choose <b>NO MORE THAN '+ver.words+'</b> from the passage for each answer.</p><p class="ins">Write your answers in boxes <b>'+range(set)+'</b> on your answer sheet.</p>';
+    ver.items.forEach(function(it,k){var n=set.from+k;KEYS[n]={kind:"text",a:it.a,disp:it.a[0],ev:it.ev};
+      h+='<div class="sent" id="q'+n+'"><span class="qn">'+n+'</span>'+fillTokens(it.s,gapInput)+expl(n)+'</div>';});
+  }
+  else if(t==="short"){
+    h+='<p class="ins">Answer the questions below.</p><p class="ins">Choose <b>NO MORE THAN '+ver.words+'</b> from the passage for each answer.</p><p class="ins">Write your answers in boxes <b>'+range(set)+'</b> on your answer sheet.</p>';
+    ver.items.forEach(function(it,k){var n=set.from+k;KEYS[n]={kind:"text",a:it.a,disp:it.a[0],ev:it.ev};
+      h+='<div class="q" id="q'+n+'"><div class="stem"><span class="qn">'+n+'</span>'+it.s+'</div>'+gapInput(n)+expl(n)+'</div>';});
+  }
+  return h+'</div>';
+}
+
+function renderAll(){
+  KEYS={};BANKS={};DROPSET={};selectedChip=null;
+  leftEl.innerHTML='';rightEl.innerHTML='';leftWraps=[];rightWraps=[];
+  for(var i=0;i<3;i++){
+    var l=document.createElement('div'); l.appendChild(document.getElementById('p'+(i+1)).content.cloneNode(true));
+    var r=document.createElement('div'), html='';
+    SETS.forEach(function(s,si){if(s.p===i) html+=renderSet(s,si);});
+    r.innerHTML=html;
+    l.style.display=r.style.display=(i===current?'':'none');
+    leftEl.appendChild(l);rightEl.appendChild(r);leftWraps.push(l);rightWraps.push(r);
+  }
+  document.getElementById('attemptLbl').textContent='Lần '+attempt+'/'+MAX_ATTEMPTS;
+  refreshNav();
+}
+
+/* tabs + nav (fixed) */
+var PS=[{t:"Passage 1",f:1,e:13},{t:"Passage 2",f:14,e:26},{t:"Passage 3",f:27,e:40}];
+var tabsEl=document.getElementById('tabs'), navEl=document.getElementById('nav');
+PS.forEach(function(p,i){
+  var b=document.createElement('button'); b.className='tab'+(i?'':' active'); b.innerHTML=p.t+'<span class="cnt" id="cnt'+i+'"></span>';
+  b.onclick=function(){showPassage(i);}; tabsEl.appendChild(b);
+  var lab=document.createElement('span'); lab.className='pl'; lab.textContent='P'+(i+1); navEl.appendChild(lab);
+  for(var n=p.f;n<=p.e;n++){(function(n){var nb=document.createElement('button'); nb.className='nb'; nb.id='nb'+n; nb.textContent=n; nb.onclick=function(){goTo(n);}; navEl.appendChild(nb);})(n);}
+});
+function passageOf(n){return n<=13?0:(n<=26?1:2);}
+function showPassage(i){
+  current=i; hideBar();
+  leftWraps.forEach(function(w,k){w.style.display=k===i?'':'none';});
+  rightWraps.forEach(function(w,k){w.style.display=k===i?'':'none';});
+  [].forEach.call(tabsEl.children,function(t,k){t.classList.toggle('active',k===i);});
+  leftEl.scrollTop=0; rightEl.scrollTop=0;
+}
+function goTo(n){
+  var i=passageOf(n); if(i!==current) showPassage(i);
+  var el=document.getElementById('q'+n)||document.getElementById('g'+n)||document.getElementById('d'+n);
+  if(el){el.scrollIntoView({behavior:'smooth',block:'center'}); var f=document.getElementById('g'+n); if(f&&!submitted) setTimeout(function(){f.focus();},300);}
+}
+function refreshNav(){
+  for(var n=1;n<=40;n++){var b=document.getElementById('nb'+n); if(!submitted) b.className='nb'+(answers[n]?' done':'');}
+  PS.forEach(function(p,i){var c=0;for(var n=p.f;n<=p.e;n++) if(answers[n]) c++; document.getElementById('cnt'+i).textContent='('+c+'/'+(p.e-p.f+1)+')';});
+}
+
+/* ================== INPUT ================== */
+function setAns(n,v){
+  if(submitted) return;
+  if(v===''||v==null) delete answers[n]; else answers[n]=v;
+  refreshNav(); saveState();
+}
+document.addEventListener('change',function(e){var t=e.target; if(t.type==='radio'&&t.name.charAt(0)==='r') setAns(+t.name.slice(1),t.value);});
+document.addEventListener('input',function(e){var t=e.target; if(t.classList&&t.classList.contains('gap')) setAns(+t.dataset.q,t.value.trim());});
+
+function fillDrop(n,letter,silent){
+  var d=document.getElementById('d'+n); if(!d) return;
+  if(!letter){d.className='drop';d.innerHTML='<b>'+n+'</b>'; if(!silent) setAns(n,''); return;}
+  var w=BANKS[DROPSET[n]][letter]; if(!w) return;
+  d.className='drop filled'; d.innerHTML='<b>'+letter+'</b>&nbsp; '+w; if(!silent) setAns(n,letter);
+}
+document.addEventListener('dragstart',function(e){var c=e.target.closest&&e.target.closest('.chip'); if(c&&!submitted){e.dataTransfer.setData('text/plain',c.dataset.set+'|'+c.dataset.v);}});
+document.addEventListener('dragover',function(e){var d=e.target.closest&&e.target.closest('.drop'); if(d&&!submitted){e.preventDefault();d.classList.add('over');}});
+document.addEventListener('dragleave',function(e){var d=e.target.closest&&e.target.closest('.drop'); if(d) d.classList.remove('over');});
+document.addEventListener('drop',function(e){var d=e.target.closest&&e.target.closest('.drop'); if(d&&!submitted){e.preventDefault();d.classList.remove('over');
+  var p=e.dataTransfer.getData('text/plain').split('|'); if(p[0]===d.dataset.set) fillDrop(+d.dataset.q,p[1]);}});
+document.addEventListener('click',function(e){
+  if(submitted) return;
+  var c=e.target.closest('.chip');
+  if(c){ if(selectedChip===c){c.classList.remove('sel');selectedChip=null;} else { if(selectedChip) selectedChip.classList.remove('sel'); selectedChip=c; c.classList.add('sel'); } return; }
+  var d=e.target.closest('.drop');
+  if(d){ var n=+d.dataset.q;
+    if(selectedChip&&selectedChip.dataset.set===d.dataset.set){fillDrop(n,selectedChip.dataset.v);selectedChip.classList.remove('sel');selectedChip=null;}
+    else if(answers[n]) fillDrop(n,'');
+  }
+});
+
+/* divider */
+(function(){
+  var dv=document.getElementById('divider'),main=document.getElementById('main'),drag=false;
+  dv.addEventListener('mousedown',function(e){drag=true;e.preventDefault();});
+  document.addEventListener('mousemove',function(e){if(!drag)return;var r=main.getBoundingClientRect();var pct=Math.min(75,Math.max(25,(e.clientX-r.left)/r.width*100));leftEl.style.flex='0 0 '+pct+'%';});
+  document.addEventListener('mouseup',function(){drag=false;});
+})();
+
+/* timer */
+function fmt(s){var m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x;}
+function elapsed(){return submitted?elapsedBefore:elapsedBefore+Math.floor((Date.now()-startTime)/1000);}
+function startTimer(){clearInterval(timerId);timerId=setInterval(function(){if(!submitted) document.getElementById('clock').textContent=fmt(elapsed());},1000);}
+
+/* ================== HIGHLIGHT ================== */
+var HL_EXCL='.slot,.expl,.drop,.chip,.mark,.tools';
+var hlBar=document.getElementById('hlbar'), pendingRange=null, pendingDel=null;
+function hlRootByKey(k){return (k.charAt(0)==='L'?leftWraps:rightWraps)[+k.charAt(1)];}
+function hlKeyOf(node){
+  for(var i=0;i<3;i++){ if(leftWraps[i]&&leftWraps[i].contains(node)) return 'L'+i; if(rightWraps[i]&&rightWraps[i].contains(node)) return 'R'+i; }
+  return null;
+}
+function tnodes(root){
+  var out=[],w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null),n;
+  while((n=w.nextNode())){ if(n.nodeValue.length && !(n.parentElement&&n.parentElement.closest(HL_EXCL))) out.push(n); }
+  return out;
+}
+function posOf(root,container,offset){
+  var b=document.createRange(); b.setStart(container,offset); b.collapse(true);
+  var nodes=tnodes(root),pos=0;
+  for(var i=0;i<nodes.length;i++){
+    var t=nodes[i];
+    if(t===container) return pos+offset;
+    if(b.comparePoint(t,0)<0) pos+=t.nodeValue.length; else return pos;
+  }
+  return pos;
+}
+function applyHL(h){
+  var root=hlRootByKey(h[0]); if(!root) return;
+  var s=h[1],e=h[2],pos=0,nodes=tnodes(root);
+  nodes.forEach(function(t){
+    var len=t.nodeValue.length, a=Math.max(s,pos)-pos, b=Math.min(e,pos+len)-pos; pos+=len;
+    if(b<=a) return;
+    var n=t; if(b<len) n.splitText(b); if(a>0) n=n.splitText(a);
+    if(!n.nodeValue.trim()) return;
+    var m=document.createElement('mark'); m.className='hl'; n.parentNode.insertBefore(m,n); m.appendChild(n);
+  });
+}
+function clearHL(root){
+  root.querySelectorAll('mark.hl').forEach(function(m){var p=m.parentNode;while(m.firstChild)p.insertBefore(m.firstChild,m);p.removeChild(m);});
+  root.normalize();
+}
+function redrawHL(key){var root=hlRootByKey(key);clearHL(root);hls.filter(function(h){return h[0]===key;}).forEach(applyHL);}
+function showBar(x,y,mode){
+  document.getElementById('hlAdd').style.display=mode==='add'?'':'none';
+  document.getElementById('hlDel').style.display=mode==='del'?'':'none';
+  hlBar.style.display='flex';
+  var w=hlBar.offsetWidth;
+  hlBar.style.left=Math.max(6,Math.min(window.innerWidth-w-6,x-w/2))+'px';
+  hlBar.style.top=Math.max(6,y-44)+'px';
+}
+function hideBar(){hlBar.style.display='none';pendingRange=null;pendingDel=null;}
+function checkSelection(){
+  if(REVIEW) return;
+  var sel=window.getSelection();
+  if(!sel||sel.isCollapsed||!sel.rangeCount){ if(!pendingDel) hideBar(); return; }
+  var r=sel.getRangeAt(0), key=hlKeyOf(r.commonAncestorContainer);
+  if(!key||!sel.toString().trim()){hideBar();return;}
+  var rect=r.getBoundingClientRect();
+  pendingRange={key:key,range:r.cloneRange()}; pendingDel=null;
+  showBar(rect.left+rect.width/2,rect.top,'add');
+}
+document.addEventListener('mouseup',function(e){ if(hlBar.contains(e.target)) return; setTimeout(checkSelection,10); });
+var selTimer=null;
+document.addEventListener('selectionchange',function(){ if(!('ontouchstart' in window)) return; clearTimeout(selTimer); selTimer=setTimeout(checkSelection,350); });
+document.addEventListener('click',function(e){
+  if(REVIEW||hlBar.contains(e.target)) return;
+  var m=e.target.closest&&e.target.closest('mark.hl');
+  if(m && window.getSelection().isCollapsed){
+    var key=hlKeyOf(m), root=hlRootByKey(key), p=posOf(root,m.firstChild,0);
+    var rect=m.getBoundingClientRect(); pendingDel={key:key,pos:p}; pendingRange=null;
+    showBar(rect.left+rect.width/2,rect.top,'del');
+  }
+});
+hlBar.addEventListener('mousedown',function(e){e.preventDefault();});
+document.getElementById('hlAdd').onclick=function(){
+  if(!pendingRange) return hideBar();
+  var root=hlRootByKey(pendingRange.key), r=pendingRange.range;
+  var s=posOf(root,r.startContainer,r.startOffset), e=posOf(root,r.endContainer,r.endOffset);
+  if(e>s){ hls.push([pendingRange.key,s,e]); redrawHL(pendingRange.key); saveState(); }
+  window.getSelection().removeAllRanges(); hideBar();
+};
+document.getElementById('hlDel').onclick=function(){
+  if(!pendingDel) return hideBar();
+  var k=pendingDel.key,p=pendingDel.pos;
+  hls=hls.filter(function(h){return !(h[0]===k&&p>=h[1]&&p<h[2]);});
+  redrawHL(k); saveState(); hideBar();
+};
+leftEl.addEventListener('scroll',hideBar); rightEl.addEventListener('scroll',hideBar);
+
+/* ================== SCORM 1.2 ================== */
+var API=null;
+function findAPI(w){var t=0;try{while(w&&!w.API&&w.parent&&w.parent!==w&&t<10){w=w.parent;t++;}return w&&w.API?w.API:null;}catch(e){return null;}}
+if(!REVIEW){
+  try{ API = IS_POPUP ? (window.opener?findAPI(window.opener):null) : (findAPI(window)||(window.opener&&findAPI(window.opener))||null); }catch(e){API=null;}
+}
+function sGet(k){try{return API?String(API.LMSGetValue(k)):'';}catch(e){return '';}}
+function sSet(k,v){try{if(API)API.LMSSetValue(k,String(v));}catch(e){}}
+function sCommit(){try{if(API)API.LMSCommit('');}catch(e){}}
+var scormOK=false;
+if(API){ if(IS_POPUP) scormOK=true; else { try{scormOK=(String(API.LMSInitialize(''))==='true');}catch(e){} if(!scormOK && sGet('cmi.core.student_id')) scormOK=true; } }
+var lmsName=sGet('cmi.core.student_name'), lmsId=sGet('cmi.core.student_id');
+function niceName(n){ if(!n) return ''; if(n.indexOf(',')>-1){var p=n.split(',');return (p[1].trim()+' '+p[0].trim()).trim();} return n; }
+if(lmsName) nameInput.value=niceName(lmsName);
+if(scormOK && !IS_POPUP && sGet('cmi.core.lesson_status')==='not attempted'){sSet('cmi.core.lesson_status','incomplete');sCommit();}
+
+/* ================== SAVE / RESTORE ================== */
+var LSKEY='ielts_rd_'+TEST_KEY+'_'+(lmsId||'local');
+function stateObj(){return {at:attempt,a:answers,s:submitted,t:elapsed(),n:nameInput.value,c:classInput.value,h:hls,hi:hist};}
+function saveState(){
+  if(REVIEW) return;
+  var st=stateObj(), js=JSON.stringify(st);
+  while(js.length>4000 && st.h.length){ st.h=st.h.slice(1); js=JSON.stringify(st); }
+  if(scormOK){sSet('cmi.suspend_data',js);sCommit();}
+  try{localStorage.setItem(LSKEY,js);}catch(e){}
+}
+function readState(){
+  if(REVIEW) return REVIEW;
+  var raw=scormOK?sGet('cmi.suspend_data'):'';
+  if(!raw){try{raw=localStorage.getItem(LSKEY)||'';}catch(e){}}
+  if(!raw) return null;
+  try{return JSON.parse(raw);}catch(e){return null;}
+}
+function restore(st){
+  answers={};hls=[];hist=[];submitted=false;elapsedBefore=0;
+  if(st){
+    attempt=Math.min(MAX_ATTEMPTS,Math.max(1,st.at||1));
+    hist=st.hi||[];
+  }
+  renderAll();
+  if(st){
+    answers=st.a||{}; hls=st.h||[]; elapsedBefore=st.t||0;
+    if(st.n&&!lmsName) nameInput.value=st.n;
+    if(st.c) classInput.value=st.c;
+    for(var n in answers){
+      var v=answers[n];
+      var r=document.querySelector('input[name="r'+n+'"][value="'+v+'"]'); if(r) r.checked=true;
+      var g=document.getElementById('g'+n); if(g) g.value=v;
+      if(document.getElementById('d'+n)) fillDrop(+n,v,true);
+    }
+    ['L0','L1','L2','R0','R1','R2'].forEach(function(k){ if(hls.some(function(h){return h[0]===k;})) redrawHL(k); });
+  }
+  startTime=Date.now();
+  refreshNav();
+  document.getElementById('clock').textContent=fmt(elapsedBefore);
+  if(st&&st.s) doSubmit(true); else startTimer();
+}
+nameInput.addEventListener('input',saveState);
+classInput.addEventListener('input',saveState);
+
+/* ================== SCORING ================== */
+function norm(s){return String(s||'').toLowerCase().replace(/[’‘`]/g,"'").replace(/[^a-z0-9' ]+/g,' ').replace(/\s+/g,' ').trim().replace(/^(the|a|an) /,'');}
+function isRight(n){
+  var k=KEYS[n], v=answers[n]; if(!v) return false;
+  if(k.kind==="text") return k.a.some(function(x){return norm(x)===norm(v);});
+  return String(v).toUpperCase()===k.a;
+}
+function band(raw){var t=[[39,9],[37,8.5],[35,8],[33,7.5],[30,7],[27,6.5],[23,6],[19,5.5],[15,5],[13,4.5],[10,4],[8,3.5],[6,3],[4,2.5],[2,2],[1,1]];
+  for(var i=0;i<t.length;i++) if(raw>=t[i][0]) return t[i][1]; return 0;}
+
+var ICON_I='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>';
+var ICON_S='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg>';
+
+function showEvidence(n){
+  var i=passageOf(n); if(i!==current) showPassage(i);
+  document.querySelectorAll('.ev.show').forEach(function(e){e.classList.remove('show');});
+  var keys=(KEYS[n]&&KEYS[n].ev)||[String(n)], first=null;
+  keys.forEach(function(k){leftWraps[i].querySelectorAll('.ev[data-q="'+k+'"]').forEach(function(s){s.classList.add('show');if(!first)first=s;});});
+  if(first) first.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function toggleExpl(n){document.getElementById('x'+n).classList.toggle('open');}
+
+function scoreNow(){var raw=0,per={};for(var n=1;n<=40;n++){per[n]=isRight(n);if(per[n])raw++;}return {raw:raw,per:per};}
+function bestOf(){var b=0;hist.forEach(function(h){if(h.s>b)b=h.s;});return b;}
+
+function doSubmit(restoring){
+  var secs=elapsed(); elapsedBefore=secs; submitted=true; clearInterval(timerId); hideBar();
+  document.getElementById('clock').textContent=fmt(secs);
+  var sc=scoreNow(), raw=sc.raw, per=sc.per, b=band(raw);
+  for(var n=1;n<=40;n++){
+    var ok=per[n], k=KEYS[n];
+    document.getElementById('nb'+n).className='nb '+(ok?'ok':'no');
+    document.getElementById('s'+n).innerHTML='<span class="mark '+(ok?'ok':'no')+'">'+(ok?'&#10003; ':'&#10007; ')+k.disp+'</span>'+
+      '<span class="tools"><button class="ic" title="Giải thích" onclick="toggleExpl('+n+')">'+ICON_I+'</button><button class="ic" title="Tìm trong bài" onclick="showEvidence('+n+')">'+ICON_S+'</button></span>';
+    document.getElementById('x'+n).innerHTML='<b>Câu '+n+':</b> '+EXPL[n]+' <br><b>→ Đáp án: '+k.disp+'</b>';
+    var g=document.getElementById('g'+n); if(g){g.classList.add(ok?'ok':'no'); g.readOnly=true;}
+    var d=document.getElementById('d'+n); if(d) d.classList.add(ok?'ok':'no');
+    document.querySelectorAll('input[name="r'+n+'"]').forEach(function(r){
+      r.disabled=true;
+      var holder=r.closest('label[data-v]')||r.closest('td.c'); if(!holder) return;
+      if(holder.dataset.v===k.a) holder.classList.add('key'); else if(r.checked) holder.classList.add('wrong');
+    });
+    var row=document.getElementById('q'+n); if(row&&row.classList.contains('q-row')) row.classList.add(ok?'good-row':'bad-row');
+  }
+  document.querySelectorAll('.chip').forEach(function(c){c.setAttribute('draggable','false');c.style.cursor='default';});
+  var sb=document.getElementById('submitBtn'); sb.disabled=true; sb.textContent='Đã nộp';
+  var st=document.getElementById('scoreTop'); st.style.display='flex'; st.textContent=raw+'/40 · Band '+b;
+
+  if(!restoring){ hist.push({at:attempt,s:raw,b:b,t:secs}); }
+  updateRetryBtn();
+  if(restoring||REVIEW) return;
+
+  document.getElementById('resTitle').textContent='Kết quả lần '+attempt;
+  document.getElementById('resScore').textContent=raw+' / 40';
+  document.getElementById('resBand').textContent='Band ước tính: '+b;
+  document.getElementById('histTbl').innerHTML= hist.length>1 ? '<tr><th>Lần</th><th>Điểm</th><th>Band</th><th>Thời gian</th></tr>'+hist.map(function(h){return '<tr><td>'+h.at+'</td><td>'+h.s+'/40</td><td>'+h.b+'</td><td>'+fmt(h.t)+'</td></tr>';}).join('') : '';
+  var left=MAX_ATTEMPTS-attempt;
+  document.getElementById('retryNote').innerHTML= left>0 ? 'Con còn <b>'+left+'</b> lần làm lại. Mỗi lần làm lại, câu hỏi sẽ được viết khác đi, nên con cần đọc lại bài chứ không nhớ đáp án được.' : 'Con đã dùng hết '+MAX_ATTEMPTS+' lần làm bài.';
+  document.getElementById('sendStatus').textContent='Đang gửi kết quả...';
+  document.getElementById('resultModal').classList.add('open');
+
+  if(scormOK){
+    var best=bestOf();
+    sSet('cmi.core.score.min',0); sSet('cmi.core.score.max',100);
+    sSet('cmi.core.score.raw',Math.round(best/40*100));
+    sSet('cmi.core.lesson_status',best>=24?'passed':'completed');
+    sSet('cmi.core.session_time',(function(s){var h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return (h<10?'0':'')+h+':'+(m<10?'0':'')+m+':'+(x<10?'0':'')+x;})(secs));
+  }
+  saveState();
+  sendResult(raw,b,secs,per);
+}
+function updateRetryBtn(){
+  var rb=document.getElementById('retryBtn');
+  if(REVIEW||!submitted||attempt>=MAX_ATTEMPTS){rb.style.display='none';return;}
+  rb.style.display=''; rb.textContent='Làm lại (lần '+(attempt+1)+'/'+MAX_ATTEMPTS+')';
+}
+
+function uid(){return Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,10);}
+function sendResult(raw,b,secs,per){
+  var data={
+    subId:uid(),
+    timestamp:new Date().toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh'}),
+    name:nameInput.value.trim()||niceName(lmsName)||'(không tên)',
+    className:classInput.value.trim().toUpperCase(),
+    studentId:lmsId||'', test:TEST_ID, testKey:TEST_KEY,
+    attempt:attempt, version:PLAN[attempt].join(''),
+    score:raw, total:40, percent:Math.round(raw/40*100), band:b,
+    p1:0,p2:0,p3:0, time:fmt(secs)
+  };
+  var wrong=[];
+  for(var n=1;n<=40;n++){
+    if(per[n]) data['p'+(passageOf(n)+1)]++; else wrong.push(n);
+    data['q'+n]=(answers[n]||'')+(per[n]?'':' ✗');
+  }
+  data.wrong=wrong.join(', ');
+  data.raw=JSON.stringify({at:attempt,a:answers,h:hls,t:secs,n:data.name,c:data.className,ts:data.timestamp,s:true});
+  var q=readQueue(); q.push({d:data,tries:0}); writeQueue(q);
+  flushQueue(true);
+}
+
+/* ---------- hàng chờ gửi kết quả (chống mất bài khi nhiều HS nộp cùng lúc) ---------- */
+var QKEY='ielts_q_'+TEST_KEY, flushing=false;
+function readQueue(){try{return JSON.parse(localStorage.getItem(QKEY)||'[]');}catch(e){return [];}}
+function writeQueue(q){try{localStorage.setItem(QKEY,JSON.stringify(q));}catch(e){}}
+function setStatus(t){var el=document.getElementById('sendStatus'); if(el) el.textContent=t;}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms);});}
+function postOnce(d){
+  return fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d)})
+    .then(function(r){return r.json();})
+    .then(function(j){ if(j&&j.ok) return 'ok'; throw new Error((j&&j.error)||'busy'); });
+}
+function postBlind(d){
+  return fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d)})
+    .then(function(){return 'blind';});
+}
+function flushQueue(fresh){
+  if(flushing) return; flushing=true;
+  var q=readQueue();
+  if(!q.length){flushing=false;return;}
+  if(SCRIPT_URL.indexOf('http')!==0){setStatus('Chưa cài link nhận kết quả. Con chụp màn hình gửi thầy nhé.');flushing=false;return;}
+  var waitFirst = fresh ? Math.floor(Math.random()*8000) : Math.floor(Math.random()*3000);
+  setStatus('Đang gửi kết quả... con đợi một chút, đừng đóng trang nhé.');
+  (async function(){
+    await sleep(waitFirst);
+    var items=readQueue(), left=[];
+    for(var i=0;i<items.length;i++){
+      var it=items[i], done=false, corsFail=0;
+      var delays=[0,3000,6000,10000,15000,20000];
+      for(var k=0;k<delays.length && !done;k++){
+        if(k>0){ setStatus('Mạng đang bận, đang thử gửi lại (lần '+(k+1)+')... đừng đóng trang nhé.'); await sleep(delays[k]+Math.floor(Math.random()*3000)); }
+        try{ await postOnce(it.d); done=true; }
+        catch(e){ if(e instanceof TypeError) corsFail++; if(corsFail>=2){ try{await postBlind(it.d);}catch(x){} it.blind=true; break; } }
+      }
+      if(!done){ it.tries=(it.tries||0)+1; if(it.tries<10) left.push(it); }
+    }
+    writeQueue(left);
+    var blindOnly = left.length && left.every(function(x){return x.blind;});
+    if(!left.length) setStatus('Đã gửi kết quả cho thầy.');
+    else if(blindOnly) setStatus('Đã gửi kết quả cho thầy.');
+    else setStatus('Chưa gửi được vì mạng bận. Kết quả đã lưu trên máy và sẽ tự gửi khi con mở lại bài. Con chụp màn hình gửi thầy cho chắc nhé.');
+    flushing=false;
+  })();
+}
+window.addEventListener('beforeunload',function(e){ if(flushing){ e.preventDefault(); e.returnValue=''; } });
+setTimeout(function(){ if(!REVIEW && readQueue().length) flushQueue(false); },1500);
+
+/* ================== BUTTONS ================== */
+var confirmAction=null;
+function ask(title,text,okText,fn){
+  document.getElementById('confirmTitle').textContent=title;
+  document.getElementById('confirmText').innerHTML=text;
+  document.getElementById('confirmGo').textContent=okText;
+  confirmAction=fn; document.getElementById('confirmModal').classList.add('open');
+}
+document.getElementById('confirmGo').onclick=function(){closeModal('confirmModal'); if(confirmAction) confirmAction();};
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+document.getElementById('submitBtn').onclick=function(){
+  if(submitted) return;
+  if(!nameInput.value.trim()){alert('Con nhập họ và tên trước khi nộp bài nhé.');nameInput.focus();return;}
+  if(!classInput.value.trim()){alert('Con nhập lớp trước khi nộp bài nhé (VD: 10A1).');classInput.focus();return;}
+  var c=Object.keys(answers).length;
+  ask('Nộp bài lần '+attempt+'?','Con đã làm '+c+'/40 câu.'+(c<40?' Còn <b>'+(40-c)+'</b> câu chưa làm.':'')+' Sau khi nộp sẽ không sửa được nữa.','Nộp bài',function(){doSubmit(false);});
+};
+document.getElementById('retryBtn').onclick=function(){
+  if(!submitted||attempt>=MAX_ATTEMPTS) return;
+  ask('Làm lại lần '+(attempt+1)+'/'+MAX_ATTEMPTS+'?','Bài làm mới sẽ bắt đầu từ đầu, câu hỏi được viết khác và có thể đổi dạng. Kết quả các lần trước vẫn được lưu.','Bắt đầu',function(){
+    attempt++; answers={}; hls=[]; submitted=false; elapsedBefore=0; startTime=Date.now(); current=0;
+    renderAll(); showPassage(0);
+    document.getElementById('submitBtn').disabled=false; document.getElementById('submitBtn').textContent='Nộp bài';
+    document.getElementById('scoreTop').style.display='none';
+    document.getElementById('clock').textContent='00:00';
+    updateRetryBtn(); startTimer(); saveState();
+  });
+};
+
+/* ================== FULLSCREEN ================== */
+function fsEl(){return document.fullscreenElement||document.webkitFullscreenElement;}
+function updFsTxt(){document.getElementById('fsTxt').textContent=fsEl()?'Thoát toàn màn hình':'Toàn màn hình';}
+document.addEventListener('fullscreenchange',updFsTxt);document.addEventListener('webkitfullscreenchange',updFsTxt);
+document.getElementById('fsBtn').onclick=function(){
+  if(fsEl()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);return;}
+  var el=document.documentElement, rq=el.requestFullscreen||el.webkitRequestFullscreen;
+  var enabled=document.fullscreenEnabled||document.webkitFullscreenEnabled;
+  if(rq&&enabled){ try{ var p=rq.call(el); if(p&&p.catch) p.catch(openPopup); }catch(e){openPopup();} }
+  else openPopup();
+};
+function openPopup(){
+  if(IS_POPUP||REVIEW) return;
+  saveState();
+  var url=location.href.split('#')[0]; url+=(url.indexOf('?')>-1?'&':'?')+'popup=1';
+  var w=window.open(url,'ielts_full','width='+screen.availWidth+',height='+screen.availHeight+',left=0,top=0');
+  if(!w){alert('Trình duyệt đang chặn cửa sổ mới. Con cho phép pop-up rồi bấm lại nhé.');return;}
+  clearInterval(timerId);
+  document.getElementById('popOverlay').style.display='flex';
+  var poll=setInterval(function(){ if(w.closed){ clearInterval(poll); document.getElementById('popOverlay').style.display='none'; restore(readState()); updateRetryBtn(); } },800);
+}
+
+/* ================== INIT ================== */
+window.addEventListener('beforeunload',function(){
+  if(REVIEW) return;
+  if(!submitted) saveState();
+  if(scormOK&&!IS_POPUP){try{API.LMSFinish('');}catch(e){}}
+});
+if(REVIEW){
+  nameInput.readOnly=true; classInput.readOnly=true; classInput.value=REVIEW.c||'';
+  document.getElementById('submitBtn').style.display='none';
+  var bn=document.getElementById('banner'); bn.style.display='block';
+  bn.innerHTML='Bài làm của <b>'+(REVIEW.n||'')+'</b>'+(REVIEW.c?' · lớp '+REVIEW.c:'')+' · lần '+(REVIEW.at||1)+' · nộp lúc '+(REVIEW.ts||'')+' · thời gian làm '+fmt(REVIEW.t||0);
+  nameInput.value=REVIEW.n||'';
+}
+if(IS_POPUP){ document.getElementById('banner').style.display='block'; document.getElementById('banner').textContent='Đang làm ở cửa sổ riêng. Bấm "Toàn màn hình" để phủ kín màn hình; đóng cửa sổ này để quay lại Canvas.'; }
+restore(readState());
+updateRetryBtn();
+</script>
+</body>
+</html>
